@@ -1,8 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var http = require("http");
-var Route_1 = require("./Route");
-var server = http.createServer(Route_1.routings);
-server.listen(3000, function () {
-    console.log("Server is listening on port 3000");
+import express from 'express';
+const app = express();
+// Middleware - function that has access to the request and response object
+app.use((req, res, next) => {
+    console.log('Middleware...');
+    next(); // Move to the next middleware
+});
+app.get('/', (req, res) => {
+    console.log('Landing page...');
+    res.send('<h1>Landing page...</h1>');
+});
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+app.get('/delete', (req, res) => {
+    res.send('<h1>Delete page...</h1>');
 });

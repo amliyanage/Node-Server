@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.routings = routings;
-function routings(req, res) {
+export function routings(req, res) {
     if (req.url === "/add") {
         res.write("<Html>");
         res.write("<body>");
@@ -14,13 +11,13 @@ function routings(req, res) {
         res.end();
     }
     else if (req.url === "/dashboard" && req.method === "POST") {
-        var body_1 = [];
-        req.on("data", function (chunk) {
-            body_1.push(chunk);
+        const body = [];
+        req.on("data", (chunk) => {
+            body.push(chunk);
         });
-        req.on("end", function () {
-            var parsedBody = Buffer.concat(body_1).toString();
-            var name = parsedBody.split("=")[1];
+        req.on("end", () => {
+            const parsedBody = Buffer.concat(body).toString();
+            const name = parsedBody.split("=")[1];
             console.log(name);
             res.write("<h1> hallow" + name + " </h1>");
             res.end();
