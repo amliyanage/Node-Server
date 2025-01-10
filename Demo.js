@@ -15,3 +15,7 @@ app.listen(3000, () => {
 app.get('/delete', (req, res) => {
     res.send('<h1>Delete page...</h1>');
 });
+app.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    res.send(`<h1>Delete page for ID: ${id}</h1>`);
+});
