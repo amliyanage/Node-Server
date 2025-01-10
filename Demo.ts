@@ -1,26 +1,34 @@
-// Simple server in js
-// const http = require("http");
-
-// const server = http.createServer((req, res) => {
-//   console.log(req.url, req.method);
-// });
-
-// server.listen(3000);
 import * as http from 'http';
 import * as fs from 'fs';
 
 const server = http.createServer((req, res) => {
-    console.log("Request url:", req.url, "Request method:", req.method);
+   
+    if(req.url === '/add'){
+        res.write('<html>')
+        res.write('<body>')
+        res.write('<form action="/dashboard" method="POST">')
+        res.write('<input type="text" name="name">')
+        res.write('<button type="submit">Send</button>')
+        res.write('</form>')
+        res.write('</body>')
+        res.write('</html>')
+        res.end()
+    } else if(req.url === '/dashboard' && req.method === 'POST'){
+        const body : Buffer[] = [];
 
-    if (req.url === '/add') {
-        fs.writeFile('demo.text', req.url, (err) => {
-            res.write('<h1>File created</h1>');
-            return res.end();
+        req.on('data', (chunk) => {
+            body.push(chunk);
+        });
+
+        req.on('end', () => {
+            const paramBody = Buffer.concat(body).toString();
+            const name = paramBody.split('=')[1];
+            res.write('<h1>Welcome ' + name + '</h1>');
+            res.end();
         });
     } else {
         res.write('<h1>Hello World</h1>');
         res.end();
-        //process.exit();
     }
 });
 

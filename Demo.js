@@ -7,19 +7,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // });
 // server.listen(3000);
 var http = require("http");
-var fs = require("fs");
 var server = http.createServer(function (req, res) {
-    console.log("Request url:", req.url, "Request method:", req.method);
     if (req.url === '/add') {
-        fs.writeFile('demo.text', req.url, function (err) {
-            res.write('<h1>File created</h1>');
-            return res.end();
+        res.write('<html>');
+        res.write('<body>');
+        res.write('<form action="/dashboard" method="POST">');
+        res.write('<input type="text" name="name">');
+        res.write('<button type="submit">Send</button>');
+        res.write('</form>');
+        res.write('</body>');
+        res.write('</html>');
+        res.end();
+    }
+    else if (req.url === '/dashboard' && req.method === 'POST') {
+        var body_1 = [];
+        req.on('data', function (chunk) {
+            body_1.push(chunk);
+        });
+        req.on('end', function () {
+            var paramBody = Buffer.concat(body_1).toString();
+            var name = paramBody.split('=')[1];
+            res.write('<h1>Welcome ' + name + '</h1>');
+            res.end();
         });
     }
     else {
         res.write('<h1>Hello World</h1>');
         res.end();
-        process.exit();
     }
 });
 server.listen(3000, function () {
