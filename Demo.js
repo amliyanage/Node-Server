@@ -7,15 +7,21 @@ app.use((req, res, next) => {
 });
 app.get('/', (req, res) => {
     console.log('Landing page...');
-    res.send('<h1>Landing page...</h1>');
+    res.send(`
+            <form method="DELETE" action="/delete">
+                <input type="text" name="Name" />
+                <button type="submit" value="Submit">Submit</button>
+            </form>
+        `);
 });
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
-app.get('/delete', (req, res) => {
-    res.send('<h1>Delete page...</h1>');
-});
-app.delete('/:id', (req, res) => {
-    const id = req.params.id;
-    res.send(`<h1>Delete page for ID: ${id}</h1>`);
+// app.get('/delete', (req, res) => {
+//     res.send('<h1>Delete page...</h1>');
+// });
+app.delete('/delete', (req, res) => {
+    const id = req.query.Name;
+    console.log(id);
+    res.send(`<h1>Deleted ${id}...</h1>`);
 });

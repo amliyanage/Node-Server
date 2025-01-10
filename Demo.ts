@@ -10,7 +10,12 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
   console.log('Landing page...');
-    res.send('<h1>Landing page...</h1>');
+    res.send(`
+            <form method="delete" action="/delete">
+                <input type="text" name="Name" />
+                <button type="submit" value="Submit">Submit</button>
+            </form>
+        `)
 });
 
 app.listen(3000, () => {
@@ -19,9 +24,4 @@ app.listen(3000, () => {
 
 app.get('/delete', (req, res) => {
     res.send('<h1>Delete page...</h1>');
-});
-
-app.delete('/:id', (req, res) => {
-    const id = req.params.id; 
-    res.send(`<h1>Delete page for ID: ${id}</h1>`); 
 });
