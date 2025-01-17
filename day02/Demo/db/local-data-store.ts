@@ -1,29 +1,74 @@
 import {Customer} from "../root/model/CustomerModel";
+import {PrismaClient} from '@prisma/client'
 
 const customerList: Customer[] = [];
 
-export const addCustomer = (customer: Customer) => {
-    customerList.push(customer);
-}
+const prisma = new PrismaClient()
 
-export const getAllCustomers = () => {
-    return customerList;
-}
-
-export const getCustomerByName = (name: string) => {
-    return customerList.filter(customer => customer.customerName === name);
-}
-
-export const updateCustomer = (customer: Customer) => {
-    const index = customerList.findIndex(c => c.customerName === customer.customerName);
-    if (index !== -1) {
-        customerList[index] = customer;
+export const addCustomer = async (customer: Customer) => {
+    try{
+        const newCustomer = await prisma.customer.create({
+            data: {
+                customerName: customer.customerName,
+                customerAge: customer.customerAge,
+                customerCity: customer.customerCity,
+                customerEmail: customer.customerEmail
+            }
+        })
+        console.log(newCustomer)
+    }catch (e) {
+        console.log(e)
     }
 }
 
-export const deleteCustomer = (name: string) => {
-    const index = customerList.findIndex(customer => customer.customerName === name);
-    if (index !== -1) {
-        customerList.splice(index, 1);
+export const getAllCustomers = async () => {
+    try {
+        return await prisma.customer.findMany()
+    } catch (e) {
+        console.log(e)
     }
+}
+
+export const getCustomerByName = async (name: string) => {
+    try {
+        return await prisma.customer.findFirst({
+            where: {
+                customerName: name
+            }
+        })
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+export const updateCustomer = async (customer: Customer) => {
+    try {
+        const updatedCustomer = await prisma.customer.findFirst(
+            {
+                where: {
+                    customerName: customer.customerName
+                }
+            }
+        )
+        prisma.customer.update({
+            where: {
+                customerId: updatedCustomer?.customerId
+            },
+            data: {
+                customerAge: customer.customerAge,
+                customerCity: customer.customerCity,
+                customerEmail: customer.customerEmail
+            }
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const deleteCustomer =async (name: string) => {
+    return prisma.customer.deleteMany({
+        where: {
+            customerName: name
+        }
+    });
 }
