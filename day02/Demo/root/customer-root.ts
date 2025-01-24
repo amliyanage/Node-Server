@@ -40,14 +40,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.put("/", (req, res) => {
-    const customer: Customer = req.body;
-    updateCustomer(customer).then(r => {
-        res.status(200).send("Customer updated successfully");
-    }).catch(e => {
-        res.status(500).send("Error updating customer");
-    });
-});
+
 
 router.delete("/delete/:name", (req, res) => {
     const name = req.params.name;
