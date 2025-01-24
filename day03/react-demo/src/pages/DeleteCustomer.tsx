@@ -3,16 +3,18 @@ import { useState} from "react";
 import {AppDispatch} from "../store/store";
 import {Modal} from "../components/Modal";
 import {useDispatch} from "react-redux";
+import {deleteCustomer} from "../reducers/CustomerReducer";
 
 export function DeleteCustomer() {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const [email,setEmail] = useState("");
 
 
     function handleSubmit() {
+        dispatch(deleteCustomer(email));
         navigate('/');
     }
 
